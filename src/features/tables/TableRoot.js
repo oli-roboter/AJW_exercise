@@ -1,50 +1,75 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
-import CircularProgress from "@material-ui/core/CircularProgress";
+// import CircularProgress from "@material-ui/core/CircularProgress";
 import TableMain from "./TableMain";
 import CustomTableHead from "./TableHead";
 import Paginator from "./Paginator";
 import Search from "./Search";
+import { getData } from "../../data/data-function";
 
 class TableRoot extends Component {
   state = {
     gotData: false,
     pageData: [],
-    pageNumber: null,
-    totalPages: 0,
-    filterStr: ""
+    pageNumber: 0,
+    totalRows: 0,
+    filterStr: "",
+    pageSize: 10
   };
 
-  componentDidMount() {}
+  componentDidMount() {
+    const { pageNumber, pageSize, filterStr } = this.state;
+    const data = getData(pageNumber, pageSize, filterStr);
 
-  handlePageChange = () =>
-    console.log("show page number change and get pageData");
+    this.setState({
+      pageData: data.pageData,
+      totalRows: data.totalRows,
+      gotData: true
+    });
+  }
 
-  handleSearch = () => console.log("Page Changin");
+  handlePageChange = (event, newPage) => {
+    console.log("handlePageChange", newPage);
+    const { pageSize, filterStr } = this.state;
+    const data = getData(newPage, pageSize, filterStr);
+    this.setState({
+      pageData: data.pageData,
+      pageNumber: newPage,
+      totalRows: data.totalRows
+    });
+  };
+
+  handleSearch = event => {
+    const { pageNumber, pageSize } = this.state;
+    const data = getData(pageNumber, pageSize, event.target.value);
+    this.setState({
+      pageData: data.pageData,
+      totalRows: data.totalRows
+    });
+  };
 
   handleExpandItem = () => console.log("displays data being expanded");
 
-  init = () => console.log("getting  initial data, pageData, totalRows");
-
   render() {
-    const { gotData, pageData, pageNumber, totalPages, filterStr } = this.state;
+    const { gotData, pageData, pageNumber, totalRows, filterStr } = this.state;
+
     return (
       <div style={{ margin: 15 }}>
         <h3>Sale's orders</h3>
 
         <Paper>
-          <Search filterStr={filterStr} handleSearch={this.handleSearch} />
+          <Search filterStr={filterStr} onChange={this.handleSearch} />
           <Table>
             <CustomTableHead />
-            {!gotData && <CircularProgress color="primary" />}
-            {gotData && <TableMain pageData={pageData} />}
-            <Paginator
-              pageNumber={pageNumber}
-              totalPages={totalPages}
-              handlePageChange={this.handlePageChange}
-            />
+            {gotData && <TableMain tableData={pageData} />}
           </Table>
+
+          <Paginator
+            pageNumber={pageNumber}
+            totalRows={totalRows}
+            handlePageChange={this.handlePageChange}
+          />
         </Paper>
       </div>
     );

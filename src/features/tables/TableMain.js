@@ -3,6 +3,7 @@ import NumberFormat from "react-number-format";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
+import moment from "moment";
 
 const TableMain = ({ tableData }) => {
   console.log("TableMain", tableData);
@@ -14,7 +15,12 @@ const TableMain = ({ tableData }) => {
           <TableCell component="th" scope="row">
             {row.soNumber}
           </TableCell>
-          <TableCell align="left">{row.Date}</TableCell>
+          <TableCell align="left">
+            {moment(
+              row.dateCreated,
+              moment.HTML5_FMT.DATETIME_LOCAL_SECONDS
+            ).format("DD-MM-YYYY")}
+          </TableCell>
           <TableCell align="center">{row.companyRefNumber}</TableCell>
           <TableCell align="center">{row.itemNumber}</TableCell>
           <TableCell align="center">{row.shipAddress1}</TableCell>

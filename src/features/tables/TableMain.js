@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
-// import CircularProgress from "@material-ui/core/CircularProgress";
 import TableBody from "@material-ui/core/TableBody";
 import CustomTableHead from "./TableHead";
 import Paginator from "./Paginator";
@@ -69,7 +68,7 @@ class TableMain extends Component {
             }}
           >
             {gotData && <PieChart filterStr={filterStr} />}
-            <Search filterStr={filterStr} onChange={this.handleSearch} />
+            <Search onChange={this.handleSearch} />
           </div>
           <Table>
             <CustomTableHead />

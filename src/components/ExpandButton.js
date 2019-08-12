@@ -1,6 +1,6 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { red } from "@material-ui/core/colors";
+import { green } from "@material-ui/core/colors";
 import Icon from "@material-ui/core/Icon";
 
 const useStyles = makeStyles(theme => ({
@@ -10,12 +10,12 @@ const useStyles = makeStyles(theme => ({
     alignItems: "flex-end"
   },
   icon: {
-    margin: theme.spacing(2)
+    color: "grey"
   },
   iconHover: {
-    margin: theme.spacing(2),
+    margin: theme.spacing(1),
     "&:hover": {
-      color: red[800]
+      color: green[800]
     }
   }
 }));
@@ -25,9 +25,8 @@ const ExpandButton = ({ onClick, showDetail }) => {
 
   return (
     <Icon
-      className={classes.iconHover}
-      color="primary"
-      style={{ fontSize: 30 }}
+      className={`${classes.iconHover} ${classes.icon}`}
+      // color="primary"
       onClick={onClick}
     >
       {showDetail ? "remove_circle" : "add_circle}"}

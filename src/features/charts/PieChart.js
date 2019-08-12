@@ -4,22 +4,23 @@ import { getOrderStatus } from "../../data/data-function";
 
 const PieChart = ({ filterStr }) => {
   const [data, setData] = useState(null);
-  console.log("PieChart", filterStr);
+
   useEffect(() => {
-    console.log("used effect", filterStr);
     const orderStatus = getOrderStatus(filterStr);
     const chartData = [
       {
         id: "Open orders",
         label: "Open",
         value: orderStatus.openOrders,
-        color: "red"
+        color: "hsl(0, 72%, 61%)",
+        legend: "white"
       },
       {
         id: "Closed orders",
         label: "closed",
         value: orderStatus.closedOrders,
-        color: "green"
+        color: "#3f51b5",
+        legend: "white"
       }
     ];
 
@@ -36,6 +37,7 @@ const PieChart = ({ filterStr }) => {
         borderColor={{ from: "color", modifiers: [["darker", 0.2]] }}
         enableRadialLabels={false}
         isInteractive={false}
+        slicesLabelsTextColor={({ legend }) => legend}
         legends={[
           {
             anchor: "left",

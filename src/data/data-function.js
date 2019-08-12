@@ -23,7 +23,6 @@ export function getOrderStatus(filterStr) {
   const filteredData = getFilteredData(filterStr);
   const total = filteredData.length;
   const openOrders = filteredData.filter(item => item.openFlag === "T").length;
-  console.log("getOrderStatus", filteredData);
   return { openOrders, closedOrders: total - openOrders };
 }
 

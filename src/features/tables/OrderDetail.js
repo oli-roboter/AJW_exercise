@@ -1,8 +1,20 @@
 import React, { Fragment } from "react";
 import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    background: "hsl(0, 0%, 96%)",
+    padding: 5
+  },
+  td: {
+    border: "1px solid white"
+  }
+}));
 
 const OrderDetail = ({ detail }) => {
+  const classes = useStyles();
   const keys = Object.keys(detail);
   const existingData = [
     "companyRefNumber",
@@ -18,11 +30,11 @@ const OrderDetail = ({ detail }) => {
     <Fragment>
       {filteredKeys.map((key, idx) => (
         <TableRow key={idx}>
-          <TableCell />
-          <TableCell colSpan={2} align="left">
+          <TableCell className={classes.td} />
+          <TableCell colSpan={2} align="left" className={classes.root}>
             {key}:
           </TableCell>
-          <TableCell colSpan={4} align="left">
+          <TableCell colSpan={3} align="left" className={classes.root}>
             {detail[key]}
           </TableCell>
         </TableRow>

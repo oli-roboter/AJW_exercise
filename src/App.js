@@ -1,7 +1,6 @@
 import React from "react";
 import "./App.css";
-import "./features/tables/TableRoot";
-import TableRoot from "./features/tables/TableRoot";
+import TableMain from "./features/tables/TableMain";
 import NavBar from "./components/NavBar";
 
 function App() {
@@ -11,7 +10,7 @@ function App() {
         <NavBar />
       </header>
       <main>
-        <TableRoot />
+        <TableMain />
       </main>
     </div>
   );

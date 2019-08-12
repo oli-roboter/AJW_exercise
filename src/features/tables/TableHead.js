@@ -6,6 +6,7 @@ import TableCell from "@material-ui/core/TableCell";
 const CustomTableHead = () => (
   <TableHead>
     <TableRow>
+      <TableCell align="center" />
       <TableCell align="left">Sales Order</TableCell>
 
       <TableCell align="left">Date</TableCell>

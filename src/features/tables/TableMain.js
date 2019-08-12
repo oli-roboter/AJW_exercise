@@ -1,46 +1,96 @@
-import React from "react";
-import NumberFormat from "react-number-format";
+import React, { Component } from "react";
+import Paper from "@material-ui/core/Paper";
+import Table from "@material-ui/core/Table";
+// import CircularProgress from "@material-ui/core/CircularProgress";
 import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableRow from "@material-ui/core/TableRow";
-import moment from "moment";
+import CustomTableHead from "./TableHead";
+import Paginator from "./Paginator";
+import Search from "./Search";
+import CustomTableRow from "./CustomTableRow";
+import PieChart from "../charts/PieChart";
+import { getData } from "../../data/data-function";
 
-const TableMain = ({ tableData }) => {
-  console.log("TableMain", tableData);
+class TableMain extends Component {
+  state = {
+    gotData: false,
+    pageData: [],
+    pageNumber: 0,
+    totalRows: 0,
+    filterStr: "",
+    pageSize: 10
+  };
 
-  return (
-    <TableBody>
-      {tableData.map((row, idx) => (
-        <TableRow key={idx}>
-          <TableCell component="th" scope="row">
-            {row.soNumber}
-          </TableCell>
-          <TableCell align="left">
-            {moment(
-              row.dateCreated,
-              moment.HTML5_FMT.DATETIME_LOCAL_SECONDS
-            ).format("DD-MM-YYYY")}
-          </TableCell>
-          <TableCell align="center">{row.companyRefNumber}</TableCell>
-          <TableCell align="center">{row.itemNumber}</TableCell>
-          <TableCell align="center">{row.shipAddress1}</TableCell>
-          <TableCell align="center">{row.companyName}</TableCell>
-          <TableCell align="center">{row.pnUpper}</TableCell>
-          {/* <TableCell align="right">
-            <NumberFormat
-              value={Math.round(row.salary)}
-              thousandSeparator={true}
-              displayType={"text"}
-            />
-          </TableCell>
-          <TableCell align="right">
-            {row.years_of_experience === null
-              ? row.years_of_experience
-              : row.years_of_experience.toFixed(1)}
-          </TableCell> */}
-        </TableRow>
-      ))}
-    </TableBody>
-  );
-};
+  componentDidMount() {
+    const { pageNumber, pageSize, filterStr } = this.state;
+    const data = getData(pageNumber, pageSize, filterStr);
+
+    this.setState({
+      pageData: data.pageData,
+      totalRows: data.totalRows,
+      gotData: true
+    });
+  }
+
+  handlePageChange = (event, newPage) => {
+    console.log("handlePageChange", newPage);
+    const { pageSize, filterStr } = this.state;
+    const data = getData(newPage, pageSize, filterStr);
+    this.setState({
+      pageData: data.pageData,
+      pageNumber: newPage,
+      totalRows: data.totalRows
+    });
+  };
+
+  handleSearch = event => {
+    const { pageNumber, pageSize } = this.state;
+    const data = getData(pageNumber, pageSize, event.target.value);
+    this.setState({
+      pageData: data.pageData,
+      totalRows: data.totalRows,
+      filterStr: event.target.value
+    });
+  };
+
+  render() {
+    const { gotData, pageData, pageNumber, totalRows, filterStr } = this.state;
+
+    return (
+      <div style={{ margin: 15 }}>
+        <h3>Sale's orders</h3>
+
+        <Paper>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              marginRight: 10
+            }}
+          >
+            {gotData && <PieChart filterStr={filterStr} />}
+            <Search filterStr={filterStr} onChange={this.handleSearch} />
+          </div>
+          <Table>
+            <CustomTableHead />
+            {gotData && (
+              <TableBody>
+                {pageData.map((row, idx) => (
+                  <CustomTableRow key={idx} rowData={row} />
+                ))}
+              </TableBody>
+            )}
+          </Table>
+
+          <Paginator
+            pageNumber={pageNumber}
+            totalRows={totalRows}
+            handlePageChange={this.handlePageChange}
+          />
+        </Paper>
+      </div>
+    );
+  }
+}
+
 export default TableMain;

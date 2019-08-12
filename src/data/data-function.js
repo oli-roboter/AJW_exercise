@@ -19,10 +19,16 @@ function getFilteredData(filterStr) {
   });
 }
 
-export function getOrderStatus() {
-  const totalOrders = data.orders.sOrders.data.length;
-  const openOrders = data.orders.sOrders.data.filter(
-    item => item.openFlag === "T"
-  ).length;
-  return { openOrders, closedOrders: totalOrders - openOrders };
+export function getOrderStatus(filterStr) {
+  const filteredData = getFilteredData(filterStr);
+  const total = filteredData.length;
+  const openOrders = filteredData.filter(item => item.openFlag === "T").length;
+  console.log("getOrderStatus", filteredData);
+  return { openOrders, closedOrders: total - openOrders };
+}
+
+export function getOrderDetail(SaleOrderDetailAutoKey) {
+  return data.orders.sOrders.data.filter(
+    item => item.SaleOrderDetailAutoKey === SaleOrderDetailAutoKey
+  );
 }

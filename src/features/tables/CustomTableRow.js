@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import ExpandButton from "../../components/ExpandButton";
 import TableCell from "@material-ui/core/TableCell";
@@ -23,10 +23,14 @@ const useStyles = makeStyles({
   }
 });
 
-const CustomTableRow = ({ rowData }) => {
+const CustomTableRow = ({ rowData, resetDetail }) => {
   const [detail, setDetail] = useState(null);
   const [showDetail, setShowDetail] = useState(false);
   const classes = useStyles();
+
+  useEffect(() => {
+    return resetDetail ? setShowDetail(false) : undefined;
+  }, [resetDetail]);
 
   const handleClick = () => {
     const orderDetail = getOrderDetail(rowData.SaleOrderDetailAutoKey);
@@ -75,7 +79,7 @@ const CustomTableRow = ({ rowData }) => {
           {rowData.pnUpper}
         </TableCell>
       </TableRow>
-      {showDetail && <OrderDetail detail={detail} />}
+      {showDetail && !resetDetail && <OrderDetail detail={detail} />}
     </Fragment>
   );
 };

@@ -16,7 +16,8 @@ class TableMain extends Component {
     pageNumber: 0,
     totalRows: 0,
     filterStr: "",
-    pageSize: 10
+    pageSize: 10,
+    resetDetail: false
   };
 
   componentDidMount() {
@@ -31,28 +32,42 @@ class TableMain extends Component {
   }
 
   handlePageChange = (event, newPage) => {
-    console.log("handlePageChange", newPage);
+    this.setState({ resetDetail: true });
     const { pageSize, filterStr } = this.state;
     const data = getData(newPage, pageSize, filterStr);
-    this.setState({
-      pageData: data.pageData,
-      pageNumber: newPage,
-      totalRows: data.totalRows
-    });
+    this.setState(
+      {
+        pageData: data.pageData,
+        pageNumber: newPage,
+        totalRows: data.totalRows
+      },
+      () => this.setState({ resetDetail: false })
+    );
   };
 
   handleSearch = event => {
     const { pageNumber, pageSize } = this.state;
+    this.setState({ resetDetail: true });
     const data = getData(pageNumber, pageSize, event.target.value);
-    this.setState({
-      pageData: data.pageData,
-      totalRows: data.totalRows,
-      filterStr: event.target.value
-    });
+    this.setState(
+      {
+        pageData: data.pageData,
+        totalRows: data.totalRows,
+        filterStr: event.target.value
+      },
+      () => this.setState({ resetDetail: false })
+    );
   };
 
   render() {
-    const { gotData, pageData, pageNumber, totalRows, filterStr } = this.state;
+    const {
+      gotData,
+      pageData,
+      pageNumber,
+      totalRows,
+      filterStr,
+      resetDetail
+    } = this.state;
 
     return (
       <div style={{ margin: 15 }}>
@@ -75,7 +90,11 @@ class TableMain extends Component {
             {gotData && (
               <TableBody>
                 {pageData.map((row, idx) => (
-                  <CustomTableRow key={idx} rowData={row} />
+                  <CustomTableRow
+                    key={idx}
+                    rowData={row}
+                    resetDetail={resetDetail}
+                  />
                 ))}
               </TableBody>
             )}

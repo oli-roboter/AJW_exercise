@@ -5,7 +5,7 @@ const Paginator = ({ totalRows, pageNumber, handlePageChange }) => {
   return (
     <TablePagination
       component="div"
-      rowsPerPageOptions={[10, 20]}
+      rowsPerPageOptions={[10]}
       count={totalRows}
       rowsPerPage={10}
       page={pageNumber}
